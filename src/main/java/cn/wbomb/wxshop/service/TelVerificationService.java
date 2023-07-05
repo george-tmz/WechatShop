@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TelVerificationService {
 
-    private static Pattern TEL_PATTERN = Pattern.compile("1\\d{10}");
+    private static final Pattern TEL_PATTERN = Pattern.compile("1\\d{10}");
 
     /**
      * Verify the phone number by user import legal.
