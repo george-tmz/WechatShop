@@ -4,6 +4,7 @@ import cn.wbomb.wxshop.dao.UserDao;
 import cn.wbomb.wxshop.generate.User;
 
 import java.util.Date;
+import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -37,4 +38,7 @@ public class UserService {
         return user;
     }
 
+    public Optional<User> getUserByTel(String tel) {
+        return Optional.ofNullable(userDao.getUserByTel(tel));
+    }
 }

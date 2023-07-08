@@ -1,9 +1,11 @@
 package cn.wbomb.wxshop.controller;
 
 
+import cn.wbomb.wxshop.entity.LoginResponse;
 import cn.wbomb.wxshop.model.TelAndCode;
 import cn.wbomb.wxshop.service.AuthService;
 import cn.wbomb.wxshop.service.TelVerificationService;
+import cn.wbomb.wxshop.service.UserContext;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,6 +13,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +51,20 @@ public class AuthController {
             SecurityUtils.getSubject().login(token);
         } else {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
+        }
+    }
+
+    @PostMapping("/logout")
+    public void logout() {
+        SecurityUtils.getSubject().logout();
+    }
+
+    @GetMapping("/status")
+    public Object loginStatus() {
+        if (UserContext.getCurrentUser() == null) {
+            return LoginResponse.notLogin();
+        } else {
+            return LoginResponse.login(UserContext.getCurrentUser());
         }
     }
 }
