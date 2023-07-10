@@ -31,7 +31,7 @@ public class GoodsDao {
         if (goods == null) {
             throw new ResourceNotFoundException("商品未找到");
         }
-        goods.setStatus(DataStatus.DELETE_STATUS);
+        goods.setStatus(DataStatus.DELETED.getName());
         goods.setUpdatedAt(new Date());
         goodsMapper.updateByPrimaryKey(goods);
         return goods;
