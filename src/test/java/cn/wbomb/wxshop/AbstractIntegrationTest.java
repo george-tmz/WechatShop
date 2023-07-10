@@ -1,10 +1,12 @@
 package cn.wbomb.wxshop;
 
+import static cn.wbomb.wxshop.service.TelVerificationServiceTest.VALID_PARAMETER;
+import static cn.wbomb.wxshop.service.TelVerificationServiceTest.VALID_PARAMETER_CODE;
 import static java.net.HttpURLConnection.HTTP_OK;
 
 import cn.wbomb.wxshop.entity.HttpResponse;
 import cn.wbomb.wxshop.entity.LoginResponse;
-import cn.wbomb.wxshop.service.TelVerificationServiceTest;
+import cn.wbomb.wxshop.generate.User;
 
 import java.util.List;
 
@@ -44,18 +46,19 @@ public class AbstractIntegrationTest {
         flyway.migrate();
     }
 
-    public HttpResponse doHttpRequest(String apiName, boolean isGet, Object requestBody, String cookie)
+    public HttpResponse doHttpRequest(String apiName, String httpMethod, Object requestBody, String cookie)
         throws JsonProcessingException {
-        HttpRequest httpRequest = isGet ? HttpRequest.get(getUrl(apiName)) : HttpRequest.post(getUrl(apiName));
+        HttpRequest request = new HttpRequest(getUrl(apiName), httpMethod);
         if (cookie != null) {
-            httpRequest.header("Cookie", cookie);
+            request.header("Cookie", cookie);
         }
-        httpRequest.contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON_VALUE);
+        request.contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON_VALUE);
+
         if (requestBody != null) {
-            httpRequest.send(objectMapper.writeValueAsString(requestBody));
+            request.send(objectMapper.writeValueAsString(requestBody));
         }
-        return HttpResponse.builder().code(httpRequest.code()).body(httpRequest.body()).headers(httpRequest.headers())
-            .build();
+
+        return new HttpResponse(request.code(), request.body(), request.headers());
     }
 
     public String getUrl(String apiName) {
@@ -63,25 +66,43 @@ public class AbstractIntegrationTest {
         return "http://localhost:" + environment.getProperty("local.server.port") + apiName;
     }
 
-    public String loginAndGetCookie() throws JsonProcessingException {
-        HttpResponse httpRequest = doHttpRequest("/api/status", true, null, null);
-        LoginResponse response = objectMapper.readValue(httpRequest.getBody(), LoginResponse.class);
-        Assertions.assertFalse(response.isLogin());
+    public UserLoginResponse loginAndGetCookie() throws JsonProcessingException {
+        // 最开始默认情况下，访问/api/status 处于未登录状态
+        String statusResponse = doHttpRequest("/api/v1/status", "GET", null, null).getBody();
+        LoginResponse statusResponseData = objectMapper.readValue(statusResponse, LoginResponse.class);
+        Assertions.assertFalse(statusResponseData.isLogin());
 
-        httpRequest = doHttpRequest("/api/code", false,
-            TelVerificationServiceTest.VALID_PARAMETER, null);
-        Assertions.assertEquals(HTTP_OK, httpRequest.getCode());
+        // 发送验证码
+        int responseCode = doHttpRequest("/api/v1/code", "POST", VALID_PARAMETER, null).getCode();
+        Assertions.assertEquals(HTTP_OK, responseCode);
 
-        httpRequest = doHttpRequest("/api/login", false,
-            TelVerificationServiceTest.VALID_PARAMETER_CODE, null);
-        List<String> setCookie = httpRequest.getHeaders().get("Set-Cookie");
-        return getSessionIdFromSetCookie(
-            setCookie.stream().filter(cookie -> cookie.contains("JSESSIONID")).findFirst().get());
+        // 带着验证码进行登录，得到Cookie
+        HttpResponse loginResponse = doHttpRequest("/api/v1/login", "POST", VALID_PARAMETER_CODE, null);
+        List<String> setCookie = loginResponse.getHeaders().get("Set-Cookie");
+        String cookie = getSessionIdFromSetCookie(setCookie.stream().filter(c -> c.contains("JSESSIONID"))
+            .findFirst()
+            .get());
+
+        statusResponse = doHttpRequest("/api/v1/status", "GET", null, cookie).getBody();
+        statusResponseData = objectMapper.readValue(statusResponse, LoginResponse.class);
+
+        return new UserLoginResponse(cookie, statusResponseData.getUser());
     }
+
 
     protected String getSessionIdFromSetCookie(String setCookie) {
         int semiColonIndex = setCookie.indexOf(";");
 
         return setCookie.substring(0, semiColonIndex);
+    }
+
+    public static class UserLoginResponse {
+        String cookie;
+        User user;
+
+        public UserLoginResponse(String cookie, User user) {
+            this.cookie = cookie;
+            this.user = user;
+        }
     }
 }

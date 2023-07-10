@@ -25,16 +25,16 @@ public class UserService {
 
     public User createUserIfNotExist(String tel) {
         User user = new User();
-        user.setName("george");
         user.setTel(tel);
+        user.setName("george");
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
         try {
             userDao.insertUser(user);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             return userDao.getUserByTel(tel);
         }
-        return user;
+        return new User();
     }
 
     public Optional<User> getUserByTel(String tel) {

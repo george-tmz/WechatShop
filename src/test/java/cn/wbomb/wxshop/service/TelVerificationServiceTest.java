@@ -1,6 +1,6 @@
 package cn.wbomb.wxshop.service;
 
-import cn.wbomb.wxshop.model.TelAndCode;
+import cn.wbomb.wxshop.entity.TelAndCode;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

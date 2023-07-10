@@ -2,7 +2,7 @@ package cn.wbomb.wxshop.controller;
 
 
 import cn.wbomb.wxshop.entity.LoginResponse;
-import cn.wbomb.wxshop.model.TelAndCode;
+import cn.wbomb.wxshop.entity.TelAndCode;
 import cn.wbomb.wxshop.service.AuthService;
 import cn.wbomb.wxshop.service.TelVerificationService;
 import cn.wbomb.wxshop.service.UserContext;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author George
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class AuthController {
     private final AuthService authService;
     private final TelVerificationService telVerificationService;

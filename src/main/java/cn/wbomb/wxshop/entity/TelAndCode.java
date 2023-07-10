@@ -1,4 +1,4 @@
-package cn.wbomb.wxshop.model;
+package cn.wbomb.wxshop.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
