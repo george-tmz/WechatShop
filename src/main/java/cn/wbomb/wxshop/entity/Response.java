@@ -1,14 +1,21 @@
 package cn.wbomb.wxshop.entity;
 
 public class Response<T> {
-    private final T data;
+    private T data;
     private String message;
 
     public static <T> Response<T> of(String message, T data) {
         return new Response<>(message, data);
     }
 
-    private Response(String message, T data) {
+    public static <T> Response<T> of(T data) {
+        return new Response<T>(null, data);
+    }
+
+    public Response() {
+    }
+
+    public Response(String message, T data) {
         this.message = message;
         this.data = data;
     }
