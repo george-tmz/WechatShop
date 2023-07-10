@@ -1,6 +1,7 @@
 package cn.wbomb.wxshop;
 
 import static javax.servlet.http.HttpServletResponse.SC_CREATED;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 import cn.wbomb.wxshop.entity.HttpResponse;
 import cn.wbomb.wxshop.entity.Response;
@@ -35,8 +36,9 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
             "POST",
             shop,
             loginResponse.cookie);
-        Response<Shop> shopInResponse = objectMapper.readValue(shopResponse.getBody(), new TypeReference<Response<Shop>>() {
-        });
+        Response<Shop> shopInResponse =
+            objectMapper.readValue(shopResponse.getBody(), new TypeReference<Response<Shop>>() {
+            });
 
         Assertions.assertEquals(SC_CREATED, shopResponse.getCode());
         Assertions.assertEquals("我的微信店铺", shopInResponse.getData().getName());
@@ -62,7 +64,13 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testDeleteGoods() {
-
+    public void return404IfGoodsToDeleteNotExist() throws JsonProcessingException {
+        String cookie = loginAndGetCookie().cookie;
+        HttpResponse response = doHttpRequest(
+            "/api/v1/goods/12345678",
+            "DELETE",
+            null,
+            cookie);
+        Assertions.assertEquals(SC_NOT_FOUND, response.getCode());
     }
 }
