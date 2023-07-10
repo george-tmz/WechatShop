@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class GoodsService {
 
-    private GoodsDao goodsDao;
-    private ShopDao shopDao;
+    private final GoodsDao goodsDao;
+    private final ShopDao shopDao;
 
     @Autowired
     public GoodsService(GoodsDao goodsDao, ShopDao shopDao) {
