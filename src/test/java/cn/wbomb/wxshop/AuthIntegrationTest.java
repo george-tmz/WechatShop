@@ -3,7 +3,6 @@ package cn.wbomb.wxshop;
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_OK;
 
-import cn.wbomb.wxshop.entity.HttpResponse;
 import cn.wbomb.wxshop.entity.LoginResponse;
 import cn.wbomb.wxshop.service.TelVerificationServiceTest;
 
@@ -33,14 +32,14 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
         String sessionId = loginAndGetCookie().cookie;
         HttpResponse httpRequest = doHttpRequest("/api/v1/status", "GET", null, sessionId);
 
-        LoginResponse loginResponse = objectMapper.readValue(httpRequest.getBody(), LoginResponse.class);
+        LoginResponse loginResponse = objectMapper.readValue(httpRequest.body, LoginResponse.class);
         Assertions.assertTrue(loginResponse.isLogin());
         Assertions.assertEquals(TelVerificationServiceTest.VALID_PARAMETER.getTel(), loginResponse.getUser().getTel());
 
         doHttpRequest("/api/v1/logout", "POST", null, sessionId);
 
         httpRequest = doHttpRequest("/api/v1/status", "GET", null, sessionId);
-        loginResponse = objectMapper.readValue(httpRequest.getBody(), LoginResponse.class);
+        loginResponse = objectMapper.readValue(httpRequest.body, LoginResponse.class);
         Assertions.assertFalse(loginResponse.isLogin());
     }
 

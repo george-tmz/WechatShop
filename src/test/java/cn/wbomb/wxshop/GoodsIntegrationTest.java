@@ -3,7 +3,6 @@ package cn.wbomb.wxshop;
 import static javax.servlet.http.HttpServletResponse.SC_CREATED;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
-import cn.wbomb.wxshop.entity.HttpResponse;
 import cn.wbomb.wxshop.entity.Response;
 import cn.wbomb.wxshop.generate.Goods;
 import cn.wbomb.wxshop.generate.Shop;
@@ -37,10 +36,10 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
             shop,
             loginResponse.cookie);
         Response<Shop> shopInResponse =
-            objectMapper.readValue(shopResponse.getBody(), new TypeReference<Response<Shop>>() {
+            objectMapper.readValue(shopResponse.body, new TypeReference<Response<Shop>>() {
             });
 
-        Assertions.assertEquals(SC_CREATED, shopResponse.getCode());
+        Assertions.assertEquals(SC_CREATED, shopResponse.code);
         Assertions.assertEquals("我的微信店铺", shopInResponse.getData().getName());
         Assertions.assertEquals("我的小店开张啦", shopInResponse.getData().getDescription());
         Assertions.assertEquals("http://shopUrl", shopInResponse.getData().getImgUrl());
@@ -57,9 +56,9 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
         goods.setShopId(1L);
 
         HttpResponse response = doHttpRequest("/api/v1/goods", "POST", goods, loginResponse.cookie);
-        Response<Goods> responseData = objectMapper.readValue(response.getBody(), new TypeReference<Response<Goods>>() {
+        Response<Goods> responseData = objectMapper.readValue(response.body, new TypeReference<Response<Goods>>() {
         });
-        Assertions.assertEquals(SC_CREATED, response.getCode());
+        Assertions.assertEquals(SC_CREATED, response.code);
         Assertions.assertEquals(goods.getName(), responseData.getData().getName());
     }
 
@@ -71,6 +70,6 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
             "DELETE",
             null,
             cookie);
-        Assertions.assertEquals(SC_NOT_FOUND, response.getCode());
+        Assertions.assertEquals(SC_NOT_FOUND, response.code);
     }
 }
