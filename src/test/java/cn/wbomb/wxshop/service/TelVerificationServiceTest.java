@@ -4,13 +4,12 @@ import cn.wbomb.wxshop.entity.TelAndCode;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
 public class TelVerificationServiceTest {
     public static final TelAndCode VALID_PARAMETER = new TelAndCode("13800000000", null);
     public static final TelAndCode VALID_PARAMETER_CODE = new TelAndCode("13800000000", "123456");
     public static final TelAndCode EMPTY_PARAMETER = new TelAndCode(null, null);
+
 
     @Test
     public void returnTrueIfValid() {
