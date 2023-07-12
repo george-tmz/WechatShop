@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: wxshop-order
+dubbo:
+  scan:
+    base-packages: cn.wbomb.order.service
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: zookeeper://127.0.0.1:2181
+
+wxshop:
+  orderservice:
+    version: 0.0.1
+server:
+  port: 8081

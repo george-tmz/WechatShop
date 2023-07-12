@@ -1,6 +1,6 @@
 spring:
   application:
-    name: wxshop
+    name: wxshop-main
   datasource:
     url: jdbc:mysql://localhost:3306/wxshop
     username: root
@@ -12,9 +12,8 @@ mybatis:
 
 wxshop:
   orderservice:
-    version: 1.0.0
+    version: 0.0.1
     url: ""
-
   redis:
     host: 127.0.0.1
     port: 6379

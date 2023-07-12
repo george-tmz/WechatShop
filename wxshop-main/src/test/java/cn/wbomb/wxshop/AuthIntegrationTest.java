@@ -3,7 +3,6 @@ package cn.wbomb.wxshop;
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_OK;
 
-import cn.wbomb.wxshop.api.OrderService;
 import cn.wbomb.wxshop.entity.LoginResponse;
 import cn.wbomb.wxshop.service.TelVerificationServiceTest;
 
@@ -12,7 +11,6 @@ import com.github.kevinsawicki.http.HttpRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
@@ -22,9 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = WxshopApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {"spring.config.location=classpath:test-application.yml"})
 public class AuthIntegrationTest extends AbstractIntegrationTest {
-
-    @Autowired
-    OrderService orderService;
 
     @Test
     public void loginLogoutTest() throws JsonProcessingException {

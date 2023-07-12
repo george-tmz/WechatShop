@@ -12,7 +12,4 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>wxshop-api</name>
     <description>微信上的电商</description>
-    <properties>
-        <database.url>jdbc:mysql://localhost:3306/wxshop</database.url>
-    </properties>
 </project>

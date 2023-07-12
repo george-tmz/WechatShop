@@ -45,8 +45,6 @@
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
             </dependency>
-
-
             <!-- Zookeeper dependencies -->
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
