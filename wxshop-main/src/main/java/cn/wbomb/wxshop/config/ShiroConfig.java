@@ -5,10 +5,7 @@ import cn.wbomb.wxshop.service.UserContext;
 import cn.wbomb.wxshop.service.UserService;
 import cn.wbomb.wxshop.service.VerificationCodeCheckService;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import javax.servlet.Filter;
+import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,7 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -47,42 +43,44 @@ public class ShiroConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new HandlerInterceptor() {
             @Override
-            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-                throws Exception {
+            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+
+                response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+                response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, POST, DELETE, OPTIONS");
+                response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+                response.setHeader("Access-Control-Allow-Credentials", "true");
+
                 Object tel = SecurityUtils.getSubject().getPrincipal();
                 if (tel != null) {
                     userService.getUserByTel(tel.toString()).ifPresent(UserContext::setCurrentUser);
+                    return true;
+                } else if (Arrays.asList(
+                    "/api/v1/code",
+                    "/api/v1/login",
+                    "/api/v1/status",
+                    "/api/v1/logout",
+                    "/error"
+                ).contains(request.getRequestURI())) {
+                    return true;
+                } else {
+                    response.setStatus(401);
+                    return false;
                 }
-                return true;
             }
 
             @Override
-            public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-                                   ModelAndView modelAndView) throws Exception {
+            public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
                 UserContext.clearCurrentUser();
             }
         });
     }
 
 
+
     @Bean
-    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager, ShiroLoginFilter shiroLoginFilter) {
+    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-
-        Map<String, String> pattern = new HashMap<>();
-        pattern.put("/api/v1/code", "anon");
-        pattern.put("/api/v1/login", "anon");
-        pattern.put("/api/v1/status", "anon");
-        pattern.put("/api/v1/logout", "anon");
-        pattern.put("/api/v1/order/testRpc", "anon");
-        pattern.put("/**", "authc");
-
-        Map<String, Filter> filtersMap = new LinkedHashMap<>();
-        filtersMap.put("shiroLoginFilter", shiroLoginFilter);
-        shiroFilterFactoryBean.setFilters(filtersMap);
-
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(pattern);
         return shiroFilterFactoryBean;
     }
 

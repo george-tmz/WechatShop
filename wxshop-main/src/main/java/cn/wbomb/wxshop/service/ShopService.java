@@ -23,7 +23,7 @@ public class ShopService {
         this.shopMapper = shopMapper;
     }
 
-    public PageResponse<Shop> getShopByUserId(Long userId, int pageNum, int pageSize) {
+    public PageResponse<Shop> getShopByUserId(int pageNum, int pageSize) {
         ShopExample countByStatus = new ShopExample();
         countByStatus.createCriteria().andStatusEqualTo(DataStatus.DELETED.getName());
         int totalNumber = (int) shopMapper.countByExample(countByStatus);

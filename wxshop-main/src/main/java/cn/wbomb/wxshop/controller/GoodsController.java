@@ -2,7 +2,6 @@ package cn.wbomb.wxshop.controller;
 
 import cn.wbomb.wxshop.entity.PageResponse;
 import cn.wbomb.wxshop.entity.Response;
-import cn.wbomb.wxshop.exception.HttpException;
 import cn.wbomb.wxshop.generate.Goods;
 import cn.wbomb.wxshop.service.GoodsService;
 
@@ -35,12 +34,7 @@ public class GoodsController {
     public Response<Goods> createdGoods(@RequestBody Goods goods, HttpServletResponse response) {
         clean(goods);
         response.setStatus(HttpServletResponse.SC_CREATED);
-        try {
-            return Response.of(goodsService.createGoods(goods));
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+        return Response.of(goodsService.createGoods(goods));
     }
 
     private void clean(Goods goods) {
@@ -51,24 +45,14 @@ public class GoodsController {
     }
 
     @PatchMapping
-    public Response<Goods> updateGoods(Goods goods, HttpServletResponse response) {
-        try {
+    public Response<Goods> updateGoods(Goods goods) {
             return Response.of(goodsService.updateGoods(goods));
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
     }
 
     @DeleteMapping("/{id}")
     public Response<Goods> deleteGoods(@PathVariable("id") Long goodsId, HttpServletResponse response) {
-        try {
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             return Response.of(goodsService.deleteGoodsById(goodsId));
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
     }
 
     @GetMapping

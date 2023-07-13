@@ -3,7 +3,6 @@ package cn.wbomb.wxshop.controller;
 import cn.wbomb.wxshop.entity.PageResponse;
 import cn.wbomb.wxshop.entity.Response;
 import cn.wbomb.wxshop.entity.ShoppingCartData;
-import cn.wbomb.wxshop.exception.HttpException;
 import cn.wbomb.wxshop.service.ShoppingCartService;
 import cn.wbomb.wxshop.service.UserContext;
 
@@ -32,11 +31,7 @@ public class ShoppingCartController {
 
     @PostMapping
     public Response<ShoppingCartData> addToShoppingCart(@RequestBody AddToShoppingCartRequest request) {
-        try {
-            return Response.of(shoppingCartService.addToShoppingCart(request, UserContext.getCurrentUser().getId()));
-        } catch (HttpException e) {
-            return Response.of(e.getMessage(), null);
-        }
+        return Response.of(shoppingCartService.addToShoppingCart(request, UserContext.getCurrentUser().getId()));
     }
 
     @GetMapping
@@ -80,10 +75,7 @@ public class ShoppingCartController {
 
     @DeleteMapping("/{id}")
     public Response<ShoppingCartData> deleteGoodsInShoppingCart(@PathVariable("id") Long goodsId) {
-        try {
-            return Response.of(shoppingCartService.deleteGoodsInShoppingCart(goodsId, UserContext.getCurrentUser().getId()));
-        } catch (HttpException e) {
-            return Response.of(e.getMessage(), null);
-        }
+        return Response.of(
+            shoppingCartService.deleteGoodsInShoppingCart(goodsId, UserContext.getCurrentUser().getId()));
     }
 }

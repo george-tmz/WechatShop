@@ -2,7 +2,6 @@ package cn.wbomb.wxshop.controller;
 
 import cn.wbomb.wxshop.entity.PageResponse;
 import cn.wbomb.wxshop.entity.Response;
-import cn.wbomb.wxshop.exception.HttpException;
 import cn.wbomb.wxshop.generate.Shop;
 import cn.wbomb.wxshop.service.ShopService;
 import cn.wbomb.wxshop.service.UserContext;
@@ -40,32 +39,21 @@ public class ShopController {
     }
 
     @DeleteMapping("/{id}")
-    public Response<Shop> deleteShop(@PathVariable("id") Long shopId, HttpServletResponse response) {
-        try {
-            return Response.of(shopService.deleteShop(shopId, UserContext.getCurrentUser().getId()));
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+    public Response<Shop> deleteShop(@PathVariable("id") Long shopId) {
+        return Response.of(shopService.deleteShop(shopId, UserContext.getCurrentUser().getId()));
     }
 
     @PatchMapping("/{id}")
     public Response<Shop> updateShop(@PathVariable("id") Long id,
-                                     @RequestBody Shop shop,
-                                     HttpServletResponse response) {
+                                     @RequestBody Shop shop) {
         shop.setId(id);
-        try {
-            return Response.of(shopService.updateShop(shop, UserContext.getCurrentUser().getId()));
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+        return Response.of(shopService.updateShop(shop, UserContext.getCurrentUser().getId()));
     }
 
     @GetMapping("/shop")
     public PageResponse<Shop> getShop(@RequestParam("pageNum") Integer pageNum,
                                       @RequestParam("pageSize") Integer pageSize) {
-        return shopService.getShopByUserId(UserContext.getCurrentUser().getId(), pageNum, pageSize);
+        return shopService.getShopByUserId(pageNum, pageSize);
     }
 
 
