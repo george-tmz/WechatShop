@@ -1,6 +1,6 @@
 package cn.wbomb.wxshop.service;
 
-import cn.wbomb.wxshop.entity.DataStatus;
+import cn.wbomb.api.DataStatus;
 import cn.wbomb.wxshop.entity.PageResponse;
 import cn.wbomb.wxshop.exception.HttpException;
 import cn.wbomb.wxshop.generate.Shop;

@@ -1,7 +1,7 @@
 package cn.wbomb.wxshop;
 
 import cn.wbomb.wxshop.controller.ShoppingCartController;
-import cn.wbomb.wxshop.entity.DataStatus;
+import cn.wbomb.api.DataStatus;
 import cn.wbomb.wxshop.entity.PageResponse;
 import cn.wbomb.wxshop.entity.Response;
 import cn.wbomb.wxshop.entity.ShoppingCartData;

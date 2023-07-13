@@ -7,7 +7,7 @@ import static java.util.stream.Collectors.toSet;
 
 import cn.wbomb.wxshop.controller.ShoppingCartController;
 import cn.wbomb.wxshop.dao.ShoppingCartQueryMapper;
-import cn.wbomb.wxshop.entity.DataStatus;
+import cn.wbomb.api.DataStatus;
 import cn.wbomb.wxshop.entity.PageResponse;
 import cn.wbomb.wxshop.entity.ShoppingCartData;
 import cn.wbomb.wxshop.entity.ShoppingCartGoods;

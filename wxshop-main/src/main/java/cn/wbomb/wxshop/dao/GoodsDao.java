@@ -1,6 +1,6 @@
 package cn.wbomb.wxshop.dao;
 
-import cn.wbomb.wxshop.entity.DataStatus;
+import cn.wbomb.api.DataStatus;
 import cn.wbomb.wxshop.generate.Goods;
 import cn.wbomb.wxshop.generate.GoodsMapper;
 

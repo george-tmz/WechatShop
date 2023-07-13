@@ -19,11 +19,11 @@
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="db.mybatis" targetProject="wxshop-api/src/main/resources">
+        <sqlMapGenerator targetPackage="db.mybatis" targetProject="wxshop-order/src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="cn.wbomb.api.generate" targetProject="wxshop-api/src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="cn.wbomb.api.generate" targetProject="wxshop-order/src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 

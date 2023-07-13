@@ -8,7 +8,7 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import cn.wbomb.wxshop.entity.DataStatus;
+import cn.wbomb.api.DataStatus;
 import cn.wbomb.wxshop.entity.PageResponse;
 import cn.wbomb.wxshop.exception.HttpException;
 import cn.wbomb.wxshop.generate.Goods;

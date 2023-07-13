@@ -39,4 +39,9 @@ public class HttpException extends RuntimeException {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public static HttpException gone(String message) {
+        return new HttpException(HttpStatus.GONE.value(), message);
+    }
+
 }

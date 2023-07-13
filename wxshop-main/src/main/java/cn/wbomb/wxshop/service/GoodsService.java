@@ -1,6 +1,8 @@
 package cn.wbomb.wxshop.service;
 
-import cn.wbomb.wxshop.entity.DataStatus;
+import static java.util.stream.Collectors.toMap;
+
+import cn.wbomb.api.DataStatus;
 import cn.wbomb.wxshop.entity.PageResponse;
 import cn.wbomb.wxshop.exception.HttpException;
 import cn.wbomb.wxshop.generate.Goods;
@@ -10,6 +12,7 @@ import cn.wbomb.wxshop.generate.Shop;
 import cn.wbomb.wxshop.generate.ShopMapper;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
@@ -23,6 +26,13 @@ public class GoodsService {
     public GoodsService(GoodsMapper goodsMapper, ShopMapper shopMapper) {
         this.goodsMapper = goodsMapper;
         this.shopMapper = shopMapper;
+    }
+
+    public Map<Long, Goods> getIdToGoodsMap(List<Long> goodsId) {
+        GoodsExample example = new GoodsExample();
+        example.createCriteria().andIdIn(goodsId);
+        List<Goods> goods = goodsMapper.selectByExample(example);
+        return goods.stream().collect(toMap(Goods::getId, x -> x));
     }
 
 
