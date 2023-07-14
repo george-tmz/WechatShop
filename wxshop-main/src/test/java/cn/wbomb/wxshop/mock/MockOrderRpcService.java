@@ -5,7 +5,7 @@ import cn.wbomb.api.DataStatus;
 import cn.wbomb.api.data.OrderInfo;
 import cn.wbomb.api.data.PageResponse;
 import cn.wbomb.api.data.RpcOrderGoods;
-import cn.wbomb.api.generate.Order;
+import cn.wbomb.api.generate.OrderTable;
 import cn.wbomb.api.rpc.OrderRpcService;
 
 import org.apache.dubbo.config.annotation.Service;
@@ -17,12 +17,12 @@ public class MockOrderRpcService implements OrderRpcService {
     public OrderRpcService orderRpcService;
 
     @Override
-    public Order createOrder(OrderInfo orderInfo, Order order) {
+    public OrderTable createOrder(OrderInfo orderInfo, OrderTable order) {
         return orderRpcService.createOrder(orderInfo, order);
     }
 
     @Override
-    public Order getOrderById(long orderId) {
+    public OrderTable getOrderById(long orderId) {
         return orderRpcService.getOrderById(orderId);
     }
 
@@ -37,7 +37,7 @@ public class MockOrderRpcService implements OrderRpcService {
     }
 
     @Override
-    public RpcOrderGoods updateOrder(Order order) {
+    public RpcOrderGoods updateOrder(OrderTable order) {
         return orderRpcService.updateOrder(order);
     }
 }

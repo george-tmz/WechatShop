@@ -11,7 +11,7 @@ import cn.wbomb.api.data.GoodsInfo;
 import cn.wbomb.api.data.OrderInfo;
 import cn.wbomb.api.data.PageResponse;
 import cn.wbomb.api.data.RpcOrderGoods;
-import cn.wbomb.api.generate.Order;
+import cn.wbomb.api.generate.OrderTable;
 import cn.wbomb.wxshop.entity.OrderResponse;
 import cn.wbomb.wxshop.entity.Response;
 import cn.wbomb.wxshop.mock.MockOrderRpcService;
@@ -48,7 +48,7 @@ public class OrderIntegrationTest extends AbstractIntegrationTest {
         MockitoAnnotations.openMocks(mockOrderRpcService);
 
         when(mockOrderRpcService.orderRpcService.createOrder(any(), any())).thenAnswer(invocation -> {
-            Order order = invocation.getArgument(1);
+            OrderTable order = invocation.getArgument(1);
             order.setId(1234L);
             return order;
         });
@@ -161,7 +161,7 @@ public class OrderIntegrationTest extends AbstractIntegrationTest {
     public void return404IfOrderNotFound() throws Exception {
         UserLoginResponse loginResponse = loginAndGetCookie();
 
-        Order order = new Order();
+        OrderTable order = new OrderTable();
         order.setId(12345L);
         Assertions.assertEquals(HttpURLConnection.HTTP_NOT_FOUND,
             doHttpRequest("/api/v1/order/1234567", "PATCH", order, loginResponse.cookie).code);
@@ -171,13 +171,13 @@ public class OrderIntegrationTest extends AbstractIntegrationTest {
     public void canUpdateOrderExpressInfomation() throws Exception {
         UserLoginResponse loginResponse = loginAndGetCookie();
 
-        Order orderUpdateRequest = new Order();
+        OrderTable orderUpdateRequest = new OrderTable();
         orderUpdateRequest.setId(12345L);
         orderUpdateRequest.setShopId(2L);
         orderUpdateRequest.setExpressCompany("顺丰");
         orderUpdateRequest.setExpressId("SF12345678");
 
-        Order orderInDB = new Order();
+        OrderTable orderInDB = new OrderTable();
         orderInDB.setId(12345L);
         orderInDB.setShopId(2L);
 
@@ -204,11 +204,11 @@ public class OrderIntegrationTest extends AbstractIntegrationTest {
     public void canUpdateOrderStatus() throws Exception {
         UserLoginResponse loginResponse = loginAndGetCookie();
 
-        Order orderUpdateRequest = new Order();
+        OrderTable orderUpdateRequest = new OrderTable();
         orderUpdateRequest.setId(12345L);
         orderUpdateRequest.setStatus(DataStatus.RECEIVED.getName());
 
-        Order orderInDB = new Order();
+        OrderTable orderInDB = new OrderTable();
         orderInDB.setId(12345L);
         orderInDB.setUserId(1L);
 
@@ -245,7 +245,7 @@ public class OrderIntegrationTest extends AbstractIntegrationTest {
                                            int number,
                                            DataStatus status) {
         RpcOrderGoods orderGoods = new RpcOrderGoods();
-        Order order = new Order();
+        OrderTable order = new OrderTable();
         GoodsInfo goodsInfo = new GoodsInfo();
 
         goodsInfo.setId(goodsId);

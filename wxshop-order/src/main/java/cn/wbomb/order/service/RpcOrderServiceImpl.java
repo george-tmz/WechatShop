@@ -10,12 +10,12 @@ import cn.wbomb.api.data.OrderInfo;
 import cn.wbomb.api.data.PageResponse;
 import cn.wbomb.api.data.RpcOrderGoods;
 import cn.wbomb.api.exception.HttpException;
-import cn.wbomb.api.generate.Order;
-import cn.wbomb.api.generate.OrderExample;
 import cn.wbomb.api.generate.OrderGoods;
 import cn.wbomb.api.generate.OrderGoodsExample;
 import cn.wbomb.api.generate.OrderGoodsMapper;
-import cn.wbomb.api.generate.OrderMapper;
+import cn.wbomb.api.generate.OrderTable;
+import cn.wbomb.api.generate.OrderTableExample;
+import cn.wbomb.api.generate.OrderTableMapper;
 import cn.wbomb.api.rpc.OrderRpcService;
 import cn.wbomb.order.mapper.MyOrderMapper;
 
@@ -31,21 +31,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Service(version = "${wxshop.orderservice.version}")
 public class RpcOrderServiceImpl implements OrderRpcService {
-    private final OrderMapper orderMapper;
+    private final OrderTableMapper orderMapper;
 
     private final MyOrderMapper myOrderMapper;
 
     private final OrderGoodsMapper orderGoodsMapper;
 
     @Autowired
-    public RpcOrderServiceImpl(OrderMapper orderMapper, MyOrderMapper myOrderMapper, OrderGoodsMapper orderGoodsMapper) {
+    public RpcOrderServiceImpl(OrderTableMapper orderMapper, MyOrderMapper myOrderMapper, OrderGoodsMapper orderGoodsMapper) {
         this.orderMapper = orderMapper;
         this.myOrderMapper = myOrderMapper;
         this.orderGoodsMapper = orderGoodsMapper;
     }
 
     @Override
-    public Order createOrder(OrderInfo orderInfo, Order order) {
+    public OrderTable createOrder(OrderInfo orderInfo, OrderTable order) {
         insertOrder(order);
         orderInfo.setOrderId(order.getId());
         myOrderMapper.insertOrders(orderInfo);
@@ -53,13 +53,13 @@ public class RpcOrderServiceImpl implements OrderRpcService {
     }
 
     @Override
-    public Order getOrderById(long orderId) {
+    public OrderTable getOrderById(long orderId) {
         return orderMapper.selectByPrimaryKey(orderId);
     }
 
     @Override
     public RpcOrderGoods deleteOrder(long orderId, long userId) {
-        Order order = orderMapper.selectByPrimaryKey(orderId);
+        OrderTable order = orderMapper.selectByPrimaryKey(orderId);
         if (order == null) {
             throw HttpException.notFound("订单未找到: " + orderId);
         }
@@ -84,18 +84,18 @@ public class RpcOrderServiceImpl implements OrderRpcService {
                                                 Integer pageNum,
                                                 Integer pageSize,
                                                 DataStatus status) {
-        OrderExample countByStatus = new OrderExample();
+        OrderTableExample countByStatus = new OrderTableExample();
         setStatus(countByStatus, status);
         int count = (int) orderMapper.countByExample(countByStatus);
 
-        OrderExample pagedOrder = new OrderExample();
+        OrderTableExample pagedOrder = new OrderTableExample();
         pagedOrder.setOffset((pageNum - 1) * pageSize);
         pagedOrder.setLimit(pageNum);
         setStatus(pagedOrder, status).andUserIdEqualTo(userId);
 
-        List<Order> orders = orderMapper.selectByExample(pagedOrder);
+        List<OrderTable> orders = orderMapper.selectByExample(pagedOrder);
 
-        List<Long> orderIds = orders.stream().map(Order::getId).collect(toList());
+        List<Long> orderIds = orders.stream().map(OrderTable::getId).collect(toList());
 
         OrderGoodsExample selectByOrderIds = new OrderGoodsExample();
         selectByOrderIds.createCriteria().andOrderIdIn(orderIds);
@@ -118,7 +118,7 @@ public class RpcOrderServiceImpl implements OrderRpcService {
     }
 
     @Override
-    public RpcOrderGoods updateOrder(Order order) {
+    public RpcOrderGoods updateOrder(OrderTable order) {
         orderMapper.updateByPrimaryKey(order);
 
         List<GoodsInfo> goodsInfo = myOrderMapper.getGoodsInfoOfOrder(order.getId());
@@ -128,7 +128,7 @@ public class RpcOrderServiceImpl implements OrderRpcService {
         return result;
     }
 
-    private RpcOrderGoods toRpcOrderGoods(Order order, Map<Long, List<OrderGoods>> orderIdToGoodsMap) {
+    private RpcOrderGoods toRpcOrderGoods(OrderTable order, Map<Long, List<OrderGoods>> orderIdToGoodsMap) {
         RpcOrderGoods result = new RpcOrderGoods();
         result.setOrder(order);
         List<GoodsInfo> goodsInfos = orderIdToGoodsMap
@@ -147,7 +147,7 @@ public class RpcOrderServiceImpl implements OrderRpcService {
         return result;
     }
 
-    private OrderExample.Criteria setStatus(OrderExample orderExample, DataStatus status) {
+    private OrderTableExample.Criteria setStatus(OrderTableExample orderExample, DataStatus status) {
         if (status == null) {
             return orderExample.createCriteria().andStatusNotEqualTo(DELETED.getName());
         } else {
@@ -155,7 +155,7 @@ public class RpcOrderServiceImpl implements OrderRpcService {
         }
     }
 
-    private void insertOrder(Order order) {
+    private void insertOrder(OrderTable order) {
         order.setStatus(PENDING.getName());
 
         verify(() -> order.getUserId() == null, "userId不能为空！");

@@ -2,8 +2,8 @@ package cn.wbomb.wxshop.controller;
 
 import cn.wbomb.api.data.OrderInfo;
 import cn.wbomb.api.data.PageResponse;
-import cn.wbomb.api.generate.Order;
 import cn.wbomb.api.DataStatus;
+import cn.wbomb.api.generate.OrderTable;
 import cn.wbomb.wxshop.entity.OrderResponse;
 import cn.wbomb.wxshop.entity.Response;
 import cn.wbomb.api.exception.HttpException;
@@ -39,7 +39,7 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/{id}", method = {RequestMethod.POST, RequestMethod.PATCH})
-    public Response<OrderResponse> updateOrder(@PathVariable("id") Integer id, @RequestBody Order order) {
+    public Response<OrderResponse> updateOrder(@PathVariable("id") Integer id, @RequestBody OrderTable order) {
         if (order.getExpressCompany() != null) {
             return Response.of(orderService.updateExpressInformation(order, UserContext.getCurrentUser().getId()));
         } else {

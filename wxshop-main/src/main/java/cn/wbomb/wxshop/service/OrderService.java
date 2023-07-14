@@ -7,7 +7,7 @@ import cn.wbomb.api.data.GoodsInfo;
 import cn.wbomb.api.data.OrderInfo;
 import cn.wbomb.api.data.PageResponse;
 import cn.wbomb.api.data.RpcOrderGoods;
-import cn.wbomb.api.generate.Order;
+import cn.wbomb.api.generate.OrderTable;
 import cn.wbomb.api.rpc.OrderRpcService;
 import cn.wbomb.wxshop.dao.GoodsStockMapper;
 import cn.wbomb.wxshop.entity.GoodsWithNumber;
@@ -56,11 +56,11 @@ public class OrderService {
 
     public OrderResponse createOrder(OrderInfo orderInfo, Long userId) {
         Map<Long, Goods> idToGoodsMap = getIdToGoodsMap(orderInfo.getGoods());
-        Order createdOrder = createOrderViaRpc(orderInfo, userId, idToGoodsMap);
+        OrderTable createdOrder = createOrderViaRpc(orderInfo, userId, idToGoodsMap);
         return generateResponse(createdOrder, idToGoodsMap, orderInfo.getGoods());
     }
 
-    private OrderResponse generateResponse(Order createdOrder, Map<Long, Goods> idToGoodsMap, List<GoodsInfo> goodsInfo) {
+    private OrderResponse generateResponse(OrderTable createdOrder, Map<Long, Goods> idToGoodsMap, List<GoodsInfo> goodsInfo) {
         OrderResponse response = new OrderResponse(createdOrder);
 
         Long shopId = new ArrayList<>(idToGoodsMap.values()).get(0).getShopId();
@@ -83,8 +83,8 @@ public class OrderService {
         return goodsService.getIdToGoodsMap(goodsId);
     }
 
-    private Order createOrderViaRpc(OrderInfo orderInfo, Long userId, Map<Long, Goods> idToGoodsMap) {
-        Order order = new Order();
+    private OrderTable createOrderViaRpc(OrderInfo orderInfo, Long userId, Map<Long, Goods> idToGoodsMap) {
+        OrderTable order = new OrderTable();
         order.setUserId(userId);
         order.setStatus(DataStatus.PENDING.getName());
         order.setAddress(userMapper.selectByPrimaryKey(userId).getAddress());
@@ -166,8 +166,8 @@ public class OrderService {
         );
     }
 
-    public OrderResponse updateExpressInformation(Order order, long userId) {
-        Order orderInDatabase = orderRpcService.getOrderById(order.getId());
+    public OrderResponse updateExpressInformation(OrderTable order, long userId) {
+        OrderTable orderInDatabase = orderRpcService.getOrderById(order.getId());
         if (orderInDatabase == null) {
             throw HttpException.notFound("订单未找到: " + order.getId());
         }
@@ -181,15 +181,15 @@ public class OrderService {
             throw HttpException.forbidden("无权访问！");
         }
 
-        Order copy = new Order();
+        OrderTable copy = new OrderTable();
         copy.setId(order.getId());
         copy.setExpressId(order.getExpressId());
         copy.setExpressCompany(order.getExpressCompany());
         return toOrderResponse(orderRpcService.updateOrder(copy));
     }
 
-    public OrderResponse updateOrderStatus(Order order, long userId) {
-        Order orderInDatabase = orderRpcService.getOrderById(order.getId());
+    public OrderResponse updateOrderStatus(OrderTable order, long userId) {
+        OrderTable orderInDatabase = orderRpcService.getOrderById(order.getId());
         if (orderInDatabase == null) {
             throw HttpException.notFound("订单未找到: " + order.getId());
         }
@@ -198,7 +198,7 @@ public class OrderService {
             throw HttpException.forbidden("无权访问！");
         }
 
-        Order copy = new Order();
+        OrderTable copy = new OrderTable();
         copy.setStatus(order.getStatus());
         return toOrderResponse(orderRpcService.updateOrder(copy));
     }

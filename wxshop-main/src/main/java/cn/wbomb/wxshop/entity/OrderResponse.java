@@ -1,12 +1,11 @@
 package cn.wbomb.wxshop.entity;
 
-
-import cn.wbomb.api.generate.Order;
+import cn.wbomb.api.generate.OrderTable;
 import cn.wbomb.wxshop.generate.Shop;
 
 import java.util.List;
 
-public class OrderResponse extends Order {
+public class OrderResponse extends OrderTable {
     private Shop shop;
     private List<GoodsWithNumber> goods;
 
@@ -14,7 +13,7 @@ public class OrderResponse extends Order {
 
     }
 
-    public OrderResponse(Order order) {
+    public OrderResponse(OrderTable order) {
         this.setId(order.getId());
         this.setUserId(order.getUserId());
         this.setTotalPrice(order.getTotalPrice());

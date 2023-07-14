@@ -1,20 +1,19 @@
 package cn.wbomb.api.data;
 
-
-import cn.wbomb.api.generate.Order;
+import cn.wbomb.api.generate.OrderTable;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class RpcOrderGoods implements Serializable {
-    private Order order;
+    private OrderTable order;
     private List<GoodsInfo> goods;
 
-    public Order getOrder() {
+    public OrderTable getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderTable order) {
         this.order = order;
     }
 

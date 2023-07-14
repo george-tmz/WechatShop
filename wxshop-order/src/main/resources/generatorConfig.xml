@@ -27,7 +27,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table schema="wxshop_order" tableName="order" domainObjectName="Order">
+        <table schema="wxshop_order" tableName="order_table" domainObjectName="OrderTable">
             <property name="useActualColumnNames" value="false"/>
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>

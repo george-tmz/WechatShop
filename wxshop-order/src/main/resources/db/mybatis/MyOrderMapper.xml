@@ -14,8 +14,8 @@
         from order_goods
         where order_id = #{id}
     </select>
-    <update id="updateById" parameterType="Order">
-        update `order`
+    <update id="updateById" parameterType="OrderTable">
+        update `order_table`
         set
         updated_at = now()
         <if test="expressCompany != null">
