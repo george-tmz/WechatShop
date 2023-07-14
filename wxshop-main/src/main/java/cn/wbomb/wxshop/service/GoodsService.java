@@ -3,8 +3,8 @@ package cn.wbomb.wxshop.service;
 import static java.util.stream.Collectors.toMap;
 
 import cn.wbomb.api.DataStatus;
-import cn.wbomb.wxshop.entity.PageResponse;
-import cn.wbomb.wxshop.exception.HttpException;
+import cn.wbomb.api.data.PageResponse;
+import cn.wbomb.api.exception.HttpException;
 import cn.wbomb.wxshop.generate.Goods;
 import cn.wbomb.wxshop.generate.GoodsExample;
 import cn.wbomb.wxshop.generate.GoodsMapper;

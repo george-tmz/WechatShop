@@ -2,7 +2,7 @@ package cn.wbomb.wxshop.controller;
 
 
 import cn.wbomb.wxshop.entity.Response;
-import cn.wbomb.wxshop.exception.HttpException;
+import cn.wbomb.api.exception.HttpException;
 
 import javax.servlet.http.HttpServletResponse;
 

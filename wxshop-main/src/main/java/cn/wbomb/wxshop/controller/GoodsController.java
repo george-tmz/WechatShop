@@ -1,6 +1,6 @@
 package cn.wbomb.wxshop.controller;
 
-import cn.wbomb.wxshop.entity.PageResponse;
+import cn.wbomb.api.data.PageResponse;
 import cn.wbomb.wxshop.entity.Response;
 import cn.wbomb.wxshop.generate.Goods;
 import cn.wbomb.wxshop.service.GoodsService;

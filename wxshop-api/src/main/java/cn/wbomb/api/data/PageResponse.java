@@ -1,4 +1,4 @@
-package cn.wbomb.wxshop.entity;
+package cn.wbomb.api.data;
 
 
 import java.util.List;

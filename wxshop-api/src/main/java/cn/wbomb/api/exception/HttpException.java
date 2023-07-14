@@ -1,4 +1,5 @@
-package cn.wbomb.wxshop.exception;
+package cn.wbomb.api.exception;
+
 
 import org.springframework.http.HttpStatus;
 
