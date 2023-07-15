@@ -49,3 +49,56 @@ create database wx_shop DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 - 添加依赖
 - 配置生成文件位置，DO与数据表对应关系。
 - 执行命令 `mvn mybatis-generator:generate`
+
+### 部署
+
+#### 购买云服务器
+
+#### 环境安装
+
+##### OpenJDK
+
+```shell
+sudo apt install openjdk-8-jdk
+```
+
+##### Docker
+
+参考 https://docs.docker.com/engine/install/ubuntu/
+
+在docker中安装并运行
+
+- mysql
+  ```shell
+    sudo docker pull mysql
+    sudo docker run --name -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=wxshop --name=wxshop-mysql -d mysql:latest
+  ```
+- zookeeper
+  ```shell
+    sudo docker pull zookeeper
+    sudo docker run -p 2181:2181 -d zookeeper
+  ```
+- redis
+  ```shell
+    sudo docker pull redis
+    sudo docker run -d -p 3679:3679 redis
+  ```
+
+- nginx
+
+##### 拉取代码
+
+
+server {
+listen 80;
+listen [::]:80;
+
+       server_name ws.wbomb.cn;
+
+       root /home/ubuntu/wechat_shop;
+       index index.html;
+
+       location / {
+               try_files $uri $uri/ =404;
+       }
+}
