@@ -71,7 +71,7 @@ sudo apt install openjdk-8-jdk
 - mysql
   ```shell
     sudo docker pull mysql
-    sudo docker run --name -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=wxshop --name=wxshop-mysql -d mysql:latest
+    sudo docker run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=wxshop --name=wxshop-mysql -d mysql:latest
   ```
 - zookeeper
   ```shell

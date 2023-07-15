@@ -12,11 +12,11 @@ import cn.wbomb.api.data.RpcOrderGoods;
 import cn.wbomb.api.exception.HttpException;
 import cn.wbomb.api.generate.OrderGoods;
 import cn.wbomb.api.generate.OrderGoodsExample;
-import cn.wbomb.api.generate.OrderGoodsMapper;
 import cn.wbomb.api.generate.OrderTable;
 import cn.wbomb.api.generate.OrderTableExample;
-import cn.wbomb.api.generate.OrderTableMapper;
 import cn.wbomb.api.rpc.OrderRpcService;
+import cn.wbomb.order.generate.OrderGoodsMapper;
+import cn.wbomb.order.generate.OrderTableMapper;
 import cn.wbomb.order.mapper.MyOrderMapper;
 
 import java.util.Collections;
